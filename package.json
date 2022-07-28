@@ -5,12 +5,9 @@
   "main": "src/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx ts-node src/index.ts",
     "build": "npx tsc",
     "build:watch": "npx tsc --watch",
-    "lint": "npx tslint --project \"./tsconfig.json\"",
-    "install": "npm install . && npm run build",
-    "postinstall": "check-engine"
+    "lint": "npx tslint --project \"./tsconfig.json\""
   },
   "repository": {
     "type": "git",
