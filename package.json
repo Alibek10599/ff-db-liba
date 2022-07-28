@@ -1,10 +1,10 @@
 {
   "name": "ff-db-liba",
   "version": "1.0.0",
-  "description": "",
+  "description": "flat file json db package",
   "main": "index.ts",
   "scripts": {
-    "test": "mocha --reporter spec",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npx ts-node src/index.ts",
     "build": "npx tsc",
     "build:watch": "npx tsc --watch",
