@@ -8,12 +8,12 @@ export interface Record<T> {
   toJSON(): T;
 }
 
-export default class FlatFileDb {
+class FlatFileDb {
   constructor(filePath: string) {
     this.filePath = filePath;
   }
   filePath = './db.json';
-  dbMap = new Map<string, Object>();
+  dbMap = new Map<string, Record<Object>>();
   getFilePath(): string {
     return this.filePath;
   }
@@ -80,3 +80,5 @@ export default class FlatFileDb {
     await this.save();
   }
 }
+
+module.exports = FlatFileDb;
