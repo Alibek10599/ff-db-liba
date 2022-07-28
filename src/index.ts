@@ -1,3 +1,3 @@
 import { FlatFileDb } from './flat-file-db';
-
-export { FlatFileDb};
+import { Record } from './interface';
+export { Record, FlatFileDb };

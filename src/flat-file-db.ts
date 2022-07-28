@@ -1,9 +1,9 @@
-import fs = require('fs');
+import * as fs from 'fs';
 import { writeFile, readFile } from 'fs/promises';
 
 import { Record } from './interface';
 
-export  class FlatFileDb {
+export class FlatFileDb {
     constructor(filePath: string) {
       this.filePath = filePath;
     }
