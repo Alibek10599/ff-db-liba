@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FlatFileDb = void 0;
 const fs = require("fs");
@@ -21,68 +12,55 @@ class FlatFileDb {
     getFilePath() {
         return this.filePath;
     }
-    checkFileExists(path) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (!fs.existsSync(path)) {
-                fs.writeFileSync(path, '');
-            }
-            return true;
-        });
+    async checkFileExists(path) {
+        if (!fs.existsSync(path)) {
+            fs.writeFileSync(path, '');
+        }
+        return true;
     }
-    save() {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield (0, promises_1.writeFile)(this.filePath, JSON.stringify(Object.fromEntries(this.dbMap)));
-        });
+    async save() {
+        await (0, promises_1.writeFile)(this.filePath, JSON.stringify(Object.fromEntries(this.dbMap)));
     }
-    getAllRecords() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const records = JSON.parse(yield (0, promises_1.readFile)(this.filePath, 'utf8'));
-            records.map((record) => {
-                this.dbMap.set(record.id, record);
-            });
-            return records;
+    async getAllRecords() {
+        const records = JSON.parse(await (0, promises_1.readFile)(this.filePath, 'utf8'));
+        records.map((record) => {
+            this.dbMap.set(record.id, record);
         });
+        return records;
     }
-    getRecordById(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const record = (yield this.getAllRecords()).find((record) => record.id === id);
-            if (!record)
-                throw new Error(`Record with id ${id} not found`);
-            return record;
-        });
+    async getRecordById(id) {
+        const record = (await this.getAllRecords()).find((record) => record.id === id);
+        if (!record)
+            throw new Error(`Record with id ${id} not found`);
+        return record;
     }
-    createRecord(record) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.getAllRecords();
-            const id = this.dbMap.size.toString() + 1;
-            record.id = id;
-            this.dbMap.set(id, record);
-            yield this.save();
-            return record;
-        });
+    async createRecord(record) {
+        await this.getAllRecords();
+        const id = this.dbMap.size.toString() + 1;
+        record.id = id;
+        this.dbMap.set(id, record);
+        await this.save();
+        return record;
     }
-    updateRecord(id, record) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const records = yield this.getAllRecords();
-            const recordIndex = records.findIndex((record) => record.id === id);
-            if (recordIndex === -1) {
-                throw new Error(`Record with id ${id} not found`);
-            }
-            this.dbMap.set(id, record);
-            yield this.save();
-            return record;
-        });
+    async updateRecord(id, record) {
+        const records = await this.getAllRecords();
+        const recordIndex = records.findIndex((record) => record.id === id);
+        if (recordIndex === -1) {
+            throw new Error(`Record with id ${id} not found`);
+        }
+        this.dbMap.set(id, record);
+        await this.save();
+        return record;
     }
-    deleteRecord(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const records = yield this.getAllRecords();
-            const record = records.find((record) => record.id === id);
-            if (!record) {
-                throw new Error(`Record with id ${id} not found`);
-            }
-            this.dbMap.delete(id);
-            yield this.save();
-        });
+    async deleteRecord(id) {
+        const records = await this.getAllRecords();
+        const record = records.find((record) => record.id === id);
+        if (!record) {
+            throw new Error(`Record with id ${id} not found`);
+        }
+        this.dbMap.delete(id);
+        await this.save();
     }
 }
 exports.FlatFileDb = FlatFileDb;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZmxhdC1maWxlLWRiLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vc3JjL2ZsYXQtZmlsZS1kYi50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7QUFBQSx5QkFBeUI7QUFDekIsMENBQWtEO0FBSWxELE1BQWEsVUFBVTtJQUNuQixZQUFZLFFBQWdCO1FBRzVCLGFBQVEsR0FBRyxXQUFXLENBQUM7UUFDdkIsVUFBSyxHQUFHLElBQUksR0FBRyxFQUEwQixDQUFDO1FBSHhDLElBQUksQ0FBQyxRQUFRLEdBQUcsUUFBUSxDQUFDO0lBQzNCLENBQUM7SUFHRCxXQUFXO1FBQ1QsT0FBTyxJQUFJLENBQUMsUUFBUSxDQUFDO0lBQ3ZCLENBQUM7SUFFRCxLQUFLLENBQUMsZUFBZSxDQUFDLElBQVk7UUFDaEMsSUFBSSxDQUFDLEVBQUUsQ0FBQyxVQUFVLENBQUMsSUFBSSxDQUFDLEVBQUU7WUFDeEIsRUFBRSxDQUFDLGFBQWEsQ0FBQyxJQUFJLEVBQUUsRUFBRSxDQUFDLENBQUM7U0FDNUI7UUFDRCxPQUFPLElBQUksQ0FBQztJQUNkLENBQUM7SUFFRCxLQUFLLENBQUMsSUFBSTtRQUNSLE1BQU0sSUFBQSxvQkFBUyxFQUNiLElBQUksQ0FBQyxRQUFRLEVBQ2IsSUFBSSxDQUFDLFNBQVMsQ0FBQyxNQUFNLENBQUMsV0FBVyxDQUFDLElBQUksQ0FBQyxLQUFLLENBQUMsQ0FBQyxDQUMvQyxDQUFDO0lBQ0osQ0FBQztJQUVELEtBQUssQ0FBQyxhQUFhO1FBQ2pCLE1BQU0sT0FBTyxHQUFHLElBQUksQ0FBQyxLQUFLLENBQ3hCLE1BQU0sSUFBQSxtQkFBUSxFQUFDLElBQUksQ0FBQyxRQUFRLEVBQUUsTUFBTSxDQUFDLENBQ3ZCLENBQUM7UUFDakIsT0FBTyxDQUFDLEdBQUcsQ0FBQyxDQUFDLE1BQU0sRUFBRSxFQUFFO1lBQ3JCLElBQUksQ0FBQyxLQUFLLENBQUMsR0FBRyxDQUFDLE1BQU0sQ0FBQyxFQUFFLEVBQUUsTUFBTSxDQUFDLENBQUM7UUFDcEMsQ0FBQyxDQUFDLENBQUM7UUFDSCxPQUFPLE9BQU8sQ0FBQztJQUNqQixDQUFDO0lBRUQsS0FBSyxDQUFDLGFBQWEsQ0FBSSxFQUFVO1FBQy9CLE1BQU0sTUFBTSxHQUFHLENBQUMsTUFBTSxJQUFJLENBQUMsYUFBYSxFQUFLLENBQUMsQ0FBQyxJQUFJLENBQ2pELENBQUMsTUFBTSxFQUFFLEVBQUUsQ0FBQyxNQUFNLENBQUMsRUFBRSxLQUFLLEVBQUUsQ0FDN0IsQ0FBQztRQUNGLElBQUksQ0FBQyxNQUFNO1lBQUUsTUFBTSxJQUFJLEtBQUssQ0FBQyxrQkFBa0IsRUFBRSxZQUFZLENBQUMsQ0FBQztRQUMvRCxPQUFPLE1BQU0sQ0FBQztJQUNoQixDQUFDO0lBRUQsS0FBSyxDQUFDLFlBQVksQ0FBSSxNQUFpQjtRQUNyQyxNQUFNLElBQUksQ0FBQyxhQUFhLEVBQUUsQ0FBQztRQUMzQixNQUFNLEVBQUUsR0FBRyxJQUFJLENBQUMsS0FBSyxDQUFDLElBQUksQ0FBQyxRQUFRLEVBQUUsR0FBRSxDQUFDLENBQUM7UUFDekMsTUFBTSxDQUFDLEVBQUUsR0FBRyxFQUFFLENBQUM7UUFDZixJQUFJLENBQUMsS0FBSyxDQUFDLEdBQUcsQ0FBQyxFQUFFLEVBQUUsTUFBTSxDQUFDLENBQUM7UUFDM0IsTUFBTSxJQUFJLENBQUMsSUFBSSxFQUFFLENBQUM7UUFDbEIsT0FBTyxNQUFNLENBQUM7SUFDaEIsQ0FBQztJQUVELEtBQUssQ0FBQyxZQUFZLENBQUksRUFBVSxFQUFFLE1BQWlCO1FBQ2pELE1BQU0sT0FBTyxHQUFHLE1BQU0sSUFBSSxDQUFDLGFBQWEsRUFBRSxDQUFDO1FBQzNDLE1BQU0sV0FBVyxHQUFHLE9BQU8sQ0FBQyxTQUFTLENBQUMsQ0FBQyxNQUFNLEVBQUUsRUFBRSxDQUFDLE1BQU0sQ0FBQyxFQUFFLEtBQUssRUFBRSxDQUFDLENBQUM7UUFDcEUsSUFBSSxXQUFXLEtBQUssQ0FBQyxDQUFDLEVBQUU7WUFDdEIsTUFBTSxJQUFJLEtBQUssQ0FBQyxrQkFBa0IsRUFBRSxZQUFZLENBQUMsQ0FBQztTQUNuRDtRQUNELElBQUksQ0FBQyxLQUFLLENBQUMsR0FBRyxDQUFDLEVBQUUsRUFBRSxNQUFNLENBQUMsQ0FBQztRQUMzQixNQUFNLElBQUksQ0FBQyxJQUFJLEVBQUUsQ0FBQztRQUNsQixPQUFPLE1BQU0sQ0FBQztJQUNoQixDQUFDO0lBRUQsS0FBSyxDQUFDLFlBQVksQ0FBQyxFQUFVO1FBQzNCLE1BQU0sT0FBTyxHQUFHLE1BQU0sSUFBSSxDQUFDLGFBQWEsRUFBRSxDQUFDO1FBQzNDLE1BQU0sTUFBTSxHQUFHLE9BQU8sQ0FBQyxJQUFJLENBQUMsQ0FBQyxNQUFNLEVBQUUsRUFBRSxDQUFDLE1BQU0sQ0FBQyxFQUFFLEtBQUssRUFBRSxDQUFDLENBQUM7UUFDMUQsSUFBSSxDQUFDLE1BQU0sRUFBRTtZQUNYLE1BQU0sSUFBSSxLQUFLLENBQUMsa0JBQWtCLEVBQUUsWUFBWSxDQUFDLENBQUM7U0FDbkQ7UUFDRCxJQUFJLENBQUMsS0FBSyxDQUFDLE1BQU0sQ0FBQyxFQUFFLENBQUMsQ0FBQztRQUN0QixNQUFNLElBQUksQ0FBQyxJQUFJLEVBQUUsQ0FBQztJQUNwQixDQUFDO0NBQ0Y7QUF2RUgsZ0NBdUVHIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0ICogYXMgZnMgZnJvbSAnZnMnO1xuaW1wb3J0IHsgd3JpdGVGaWxlLCByZWFkRmlsZSB9IGZyb20gJ2ZzL3Byb21pc2VzJztcblxuaW1wb3J0IHsgUmVjb3JkIH0gZnJvbSAnLi9pbnRlcmZhY2UnO1xuXG5leHBvcnQgY2xhc3MgRmxhdEZpbGVEYiB7XG4gICAgY29uc3RydWN0b3IoZmlsZVBhdGg6IHN0cmluZykge1xuICAgICAgdGhpcy5maWxlUGF0aCA9IGZpbGVQYXRoO1xuICAgIH1cbiAgICBmaWxlUGF0aCA9ICcuL2RiLmpzb24nO1xuICAgIGRiTWFwID0gbmV3IE1hcDxzdHJpbmcsIFJlY29yZDxPYmplY3Q+PigpO1xuICAgIGdldEZpbGVQYXRoKCk6IHN0cmluZyB7XG4gICAgICByZXR1cm4gdGhpcy5maWxlUGF0aDtcbiAgICB9XG4gIFxuICAgIGFzeW5jIGNoZWNrRmlsZUV4aXN0cyhwYXRoOiBzdHJpbmcpOiBQcm9taXNlPGJvb2xlYW4+IHtcbiAgICAgIGlmICghZnMuZXhpc3RzU3luYyhwYXRoKSkge1xuICAgICAgICBmcy53cml0ZUZpbGVTeW5jKHBhdGgsICcnKTtcbiAgICAgIH1cbiAgICAgIHJldHVybiB0cnVlO1xuICAgIH1cbiAgXG4gICAgYXN5bmMgc2F2ZSgpOiBQcm9taXNlPHZvaWQ+IHtcbiAgICAgIGF3YWl0IHdyaXRlRmlsZShcbiAgICAgICAgdGhpcy5maWxlUGF0aCxcbiAgICAgICAgSlNPTi5zdHJpbmdpZnkoT2JqZWN0LmZyb21FbnRyaWVzKHRoaXMuZGJNYXApKVxuICAgICAgKTtcbiAgICB9XG4gIFxuICAgIGFzeW5jIGdldEFsbFJlY29yZHM8VD4oKTogUHJvbWlzZTxSZWNvcmQ8VD5bXT4ge1xuICAgICAgY29uc3QgcmVjb3JkcyA9IEpTT04ucGFyc2UoXG4gICAgICAgIGF3YWl0IHJlYWRGaWxlKHRoaXMuZmlsZVBhdGgsICd1dGY4JylcbiAgICAgICkgYXMgUmVjb3JkPFQ+W107XG4gICAgICByZWNvcmRzLm1hcCgocmVjb3JkKSA9PiB7XG4gICAgICAgIHRoaXMuZGJNYXAuc2V0KHJlY29yZC5pZCwgcmVjb3JkKTtcbiAgICAgIH0pO1xuICAgICAgcmV0dXJuIHJlY29yZHM7XG4gICAgfVxuICBcbiAgICBhc3luYyBnZXRSZWNvcmRCeUlkPFQ+KGlkOiBzdHJpbmcpOiBQcm9taXNlPFJlY29yZDxUPj4ge1xuICAgICAgY29uc3QgcmVjb3JkID0gKGF3YWl0IHRoaXMuZ2V0QWxsUmVjb3JkczxUPigpKS5maW5kKFxuICAgICAgICAocmVjb3JkKSA9PiByZWNvcmQuaWQgPT09IGlkXG4gICAgICApO1xuICAgICAgaWYgKCFyZWNvcmQpIHRocm93IG5ldyBFcnJvcihgUmVjb3JkIHdpdGggaWQgJHtpZH0gbm90IGZvdW5kYCk7XG4gICAgICByZXR1cm4gcmVjb3JkO1xuICAgIH1cbiAgXG4gICAgYXN5bmMgY3JlYXRlUmVjb3JkPFQ+KHJlY29yZDogUmVjb3JkPFQ+KTogUHJvbWlzZTxSZWNvcmQ8VD4+IHtcbiAgICAgIGF3YWl0IHRoaXMuZ2V0QWxsUmVjb3JkcygpO1xuICAgICAgY29uc3QgaWQgPSB0aGlzLmRiTWFwLnNpemUudG9TdHJpbmcoKSArMTtcbiAgICAgIHJlY29yZC5pZCA9IGlkO1xuICAgICAgdGhpcy5kYk1hcC5zZXQoaWQsIHJlY29yZCk7XG4gICAgICBhd2FpdCB0aGlzLnNhdmUoKTtcbiAgICAgIHJldHVybiByZWNvcmQ7XG4gICAgfVxuICBcbiAgICBhc3luYyB1cGRhdGVSZWNvcmQ8VD4oaWQ6IHN0cmluZywgcmVjb3JkOiBSZWNvcmQ8VD4pOiBQcm9taXNlPFJlY29yZDxUPj4ge1xuICAgICAgY29uc3QgcmVjb3JkcyA9IGF3YWl0IHRoaXMuZ2V0QWxsUmVjb3JkcygpO1xuICAgICAgY29uc3QgcmVjb3JkSW5kZXggPSByZWNvcmRzLmZpbmRJbmRleCgocmVjb3JkKSA9PiByZWNvcmQuaWQgPT09IGlkKTtcbiAgICAgIGlmIChyZWNvcmRJbmRleCA9PT0gLTEpIHtcbiAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBSZWNvcmQgd2l0aCBpZCAke2lkfSBub3QgZm91bmRgKTtcbiAgICAgIH1cbiAgICAgIHRoaXMuZGJNYXAuc2V0KGlkLCByZWNvcmQpO1xuICAgICAgYXdhaXQgdGhpcy5zYXZlKCk7XG4gICAgICByZXR1cm4gcmVjb3JkO1xuICAgIH1cbiAgXG4gICAgYXN5bmMgZGVsZXRlUmVjb3JkKGlkOiBzdHJpbmcpOiBQcm9taXNlPHZvaWQ+IHtcbiAgICAgIGNvbnN0IHJlY29yZHMgPSBhd2FpdCB0aGlzLmdldEFsbFJlY29yZHMoKTtcbiAgICAgIGNvbnN0IHJlY29yZCA9IHJlY29yZHMuZmluZCgocmVjb3JkKSA9PiByZWNvcmQuaWQgPT09IGlkKTtcbiAgICAgIGlmICghcmVjb3JkKSB7XG4gICAgICAgIHRocm93IG5ldyBFcnJvcihgUmVjb3JkIHdpdGggaWQgJHtpZH0gbm90IGZvdW5kYCk7XG4gICAgICB9XG4gICAgICB0aGlzLmRiTWFwLmRlbGV0ZShpZCk7XG4gICAgICBhd2FpdCB0aGlzLnNhdmUoKTtcbiAgICB9XG4gIH0iXX0=

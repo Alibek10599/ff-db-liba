@@ -12,3 +12,4 @@ export declare class FlatFileDb {
     updateRecord<T>(id: string, record: Record<T>): Promise<Record<T>>;
     deleteRecord(id: string): Promise<void>;
 }
+//# sourceMappingURL=flat-file-db.d.ts.map
