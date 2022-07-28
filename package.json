@@ -2,20 +2,23 @@
   "name": "ff-db-liba",
   "version": "1.0.0",
   "description": "flat file json db package",
-  "main": "index.ts",
+  "main": "src/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npx ts-node src/index.ts",
     "build": "npx tsc",
     "build:watch": "npx tsc --watch",
     "lint": "npx tslint --project \"./tsconfig.json\"",
-    "postversion": "git push && git push --tags",
-    "prepublishOnly": "npm run ci",
-    "preversion": "npm run ci"
+    "install": "npm install . && npm run build",
+    "postinstall": "check-engine"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Alibek10599/ff-db-liba.git"
   },
   "keywords": [],
   "author": "Alibek",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/chai": "^4.3.1",
     "@types/mocha": "^9.1.1",
