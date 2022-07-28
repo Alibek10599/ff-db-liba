@@ -52,7 +52,9 @@ export default class FlatFileDb {
 
   async createRecord<T>(record: Record<T>): Promise<Record<T>> {
     await this.getAllRecords();
-    this.dbMap.set(record.id, record);
+    const id = this.dbMap.size.toString() +1;
+    record.id = id;
+    this.dbMap.set(id, record);
     await this.save();
     return record;
   }
@@ -63,7 +65,7 @@ export default class FlatFileDb {
     if (recordIndex === -1) {
       throw new Error(`Record with id ${id} not found`);
     }
-    this.dbMap.set(record.id, record);
+    this.dbMap.set(id, record);
     await this.save();
     return record;
   }
