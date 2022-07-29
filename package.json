@@ -1,6 +1,6 @@
 {
   "name": "ff-db-liba",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "flat file json db package",
   "main": "dist/index.js",
   "scripts": {
@@ -13,7 +13,13 @@
     "type": "git",
     "url": "git+ssh://git@github.com/Alibek10599/ff-db-liba.git"
   },
-  "keywords": [],
+  "keywords": [
+    "flat file",
+    "json",
+    "db",
+    "database",
+    "nosql"
+  ],
   "author": "Alibek",
   "license": "MIT",
   "devDependencies": {
