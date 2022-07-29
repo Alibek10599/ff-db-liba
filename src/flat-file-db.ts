@@ -4,11 +4,20 @@ import { writeFile, readFile } from 'fs/promises';
 import { Record } from './interface';
 
 export class FlatFileDb {
+    public filePath: string;
+    public dbMap = new Map<string, Record<Object>>();
+
     constructor(filePath: string) {
       this.filePath = filePath;
+      const records = this.getAllRecords();
+      records.then((records) => {
+        records.map((record) => {
+          this.dbMap.set(record.id, record);
+        });
+      });
     }
-    filePath = './db.json';
-    dbMap = new Map<string, Record<Object>>();
+    
+    
     getFilePath(): string {
       return this.filePath;
     }

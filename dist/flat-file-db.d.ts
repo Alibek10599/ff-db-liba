@@ -1,8 +1,8 @@
 import { Record } from './interface';
 export declare class FlatFileDb {
-    constructor(filePath: string);
     filePath: string;
     dbMap: Map<string, Record<Object>>;
+    constructor(filePath: string);
     getFilePath(): string;
     checkFileExists(path: string): Promise<boolean>;
     save(): Promise<void>;
