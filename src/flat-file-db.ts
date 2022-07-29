@@ -5,16 +5,9 @@ import { Record } from './interface';
 
 export class FlatFileDb {
     public filePath: string;
-    public dbMap = new Map<string, Record<Object>>();
 
     constructor(filePath: string) {
       this.filePath = filePath;
-      const records = this.getAllRecords();
-      records.then((records) => {
-        records.map((record) => {
-          this.dbMap.set(record.id, record);
-        });
-      });
     }
     
     
@@ -29,21 +22,16 @@ export class FlatFileDb {
       return true;
     }
   
-    async save(): Promise<void> {
+    async save( data: Record<Object>[]): Promise<void> {
       await writeFile(
         this.filePath,
-        JSON.stringify(Object.fromEntries(this.dbMap))
+        JSON.stringify(data),
       );
     }
   
     async getAllRecords<T>(): Promise<Record<T>[]> {
-      const records = JSON.parse(
-        await readFile(this.filePath, 'utf8')
-      ) as Record<T>[];
-      records.map((record) => {
-        this.dbMap.set(record.id, record);
-      });
-      return records;
+      return readFile(this.filePath)
+     .then((records): Record<T>[] => JSON.parse(records.toString()) as Record<T>[]);
     }
   
     async getRecordById<T>(id: string): Promise<Record<T>> {
@@ -55,11 +43,11 @@ export class FlatFileDb {
     }
   
     async createRecord<T>(record: Record<T>): Promise<Record<T>> {
-      await this.getAllRecords();
-      const id = this.dbMap.size.toString() +1;
+      const records = await this.getAllRecords();
+      const id = records.length.toString() +1;
       record.id = id;
-      this.dbMap.set(id, record);
-      await this.save();
+        records.push(record);
+      await this.save(records);
       return record;
     }
   
@@ -69,8 +57,8 @@ export class FlatFileDb {
       if (recordIndex === -1) {
         throw new Error(`Record with id ${id} not found`);
       }
-      this.dbMap.set(id, record);
-      await this.save();
+      records[recordIndex] = record;
+      await this.save(records);
       return record;
     }
   
@@ -80,7 +68,8 @@ export class FlatFileDb {
       if (!record) {
         throw new Error(`Record with id ${id} not found`);
       }
-      this.dbMap.delete(id);
-      await this.save();
+      records.splice(records.indexOf(record), 1);
+      await this.save(records);
     }
   }
+  
