@@ -1,6 +1,6 @@
 {
   "name": "ff-db-liba",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "flat file json db package",
   "main": "dist/index.js",
   "scripts": {

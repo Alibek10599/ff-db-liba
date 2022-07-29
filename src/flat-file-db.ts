@@ -44,8 +44,8 @@ export class FlatFileDb {
   
     async createRecord<T>(record: Record<T>): Promise<Record<T>> {
       const records = await this.getAllRecords();
-      const id = records.length.toString() +1;
-      record.id = id;
+      const id: number = records.length + 1;
+      record.id = id.toString();
         records.push(record);
       await this.save(records);
       return record;
