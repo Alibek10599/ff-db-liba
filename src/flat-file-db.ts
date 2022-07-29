@@ -22,16 +22,18 @@ export class FlatFileDb {
       return true;
     }
   
-    async save( data: Record<Object>[]): Promise<void> {
-      await writeFile(
+    async save<T>(data: Record<T>[]): Promise<void> {
+      return writeFile(
         this.filePath,
         JSON.stringify(data),
-      );
+      ).then(() => {data});
     }
   
     async getAllRecords<T>(): Promise<Record<T>[]> {
-      return readFile(this.filePath)
-     .then((records): Record<T>[] => JSON.parse(records.toString()) as Record<T>[]);
+        const records = JSON.parse(
+            await readFile(this.filePath, 'utf8')
+          ) as Record<T>[];
+          return records;
     }
   
     async getRecordById<T>(id: string): Promise<Record<T>> {

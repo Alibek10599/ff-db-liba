@@ -4,7 +4,7 @@ export declare class FlatFileDb {
     constructor(filePath: string);
     getFilePath(): string;
     checkFileExists(path: string): Promise<boolean>;
-    save(data: Record<Object>[]): Promise<void>;
+    save<T>(data: Record<T>[]): Promise<void>;
     getAllRecords<T>(): Promise<Record<T>[]>;
     getRecordById<T>(id: string): Promise<Record<T>>;
     createRecord<T>(record: Record<T>): Promise<Record<T>>;
