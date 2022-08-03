@@ -1,13 +1,14 @@
 {
   "name": "ff-db-liba",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "flat file json db package.",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx tsc",
     "build:watch": "npx tsc --watch",
-    "lint": "npx tslint --project \"./tsconfig.json\""
+    "lint": "npx tslint --project \"./tsconfig.json\"",
+    "start": "npx ts-node index.ts"
   },
   "repository": {
     "type": "git",

@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import { Record } from './interface';
 export declare class FlatFileDb {
     filePath: string;
@@ -5,6 +6,10 @@ export declare class FlatFileDb {
     getFilePath(): string;
     checkFileExists(path: string): Promise<boolean>;
     save<T>(data: Record<T>[]): Promise<void>;
+    getBufferStats(offset: number, position: number): Promise<{
+        buffer: Buffer;
+        bytesRead: number;
+    }>;
     getAllRecords<T>(): Promise<Record<T>[]>;
     getRecordById<T>(id: string): Promise<Record<T>>;
     createRecord<T>(record: Record<T>): Promise<Record<T>>;
